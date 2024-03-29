@@ -5,6 +5,6 @@ FactoryBot.define do
     region { Faker::Lorem::sentence }
     city { Faker::Lorem::sentence }
     travel_type { Faker::Lorem::sentence }
-    tour_host
+    association :tour_host
   end
 end
