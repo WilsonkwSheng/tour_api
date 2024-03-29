@@ -1,5 +1,8 @@
 class TourHost < ApplicationRecord
   has_secure_password
+  has_one :image, as: :imageable, dependent: :destroy
+  accepts_nested_attributes_for :image
+
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

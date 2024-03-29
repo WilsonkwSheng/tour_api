@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe TourHostsController, type: :controller do
   describe 'POST #create' do
+    # Note: Commenting this out for now as it is saving to local drive public folder.
+    # let(:image_file) { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'test_image.png'), 'image/png') }
     let(:tour_host) { build_stubbed(:tour_host) }
 
     context 'with valid parameters' do

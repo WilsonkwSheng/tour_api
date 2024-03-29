@@ -13,6 +13,7 @@ class TourHostsController < ApplicationController
   def create
     @tour_host = TourHost.new(tour_host_params)
     if @tour_host.save
+      @tour_host.create_image(file: params[:image]) if params[:image]
       render json: @tour_host, status: :created
     else
       render json: { errors: @tour_host.errors.full_messages }, status: :unprocessable_entity
@@ -28,6 +29,7 @@ class TourHostsController < ApplicationController
   def tour_host_params
     params.permit(
       :name, :email, :password, :password_confirmation, :description,
+      image_attributes: [:id, :file]
     )
   end
 end
