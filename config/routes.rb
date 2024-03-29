@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :tour_hosts, only: [:create, :show]
+  post '/tour_hosts_auth/login', to: 'tour_hosts_authentication#login'
 end
