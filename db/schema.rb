@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_29_052532) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_29_064349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_29_052532) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_images_on_imageable"
+  end
+
+  create_table "itineraries", force: :cascade do |t|
+    t.bigint "tour_id", null: false
+    t.date "date", null: false
+    t.integer "day", null: false
+    t.time "start_at", null: false
+    t.time "end_at", null: false
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id", "date", "start_at", "end_at"], name: "index_itineraries_on_tour_id_and_date_and_start_at_and_end_at", unique: true
+    t.index ["tour_id"], name: "index_itineraries_on_tour_id"
   end
 
   create_table "tour_hosts", force: :cascade do |t|
@@ -45,5 +59,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_29_052532) do
     t.index ["tour_host_id"], name: "index_tours_on_tour_host_id"
   end
 
+  add_foreign_key "itineraries", "tours"
   add_foreign_key "tours", "tour_hosts"
 end
