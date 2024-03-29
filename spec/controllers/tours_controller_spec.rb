@@ -76,4 +76,29 @@ RSpec.describe ToursController, type: :controller do
       expect(JSON.parse(response.body)).to eq({ 'error' => 'Tour not found' })
     end
   end
+
+  describe 'DELETE #destroy' do
+    let(:tour_host) { create(:tour_host) }
+    let!(:tour) { create(:tour, tour_host: tour_host) }
+    let!(:another_tour) { create(:tour) }
+
+    before do
+      allow_any_instance_of(ApplicationController).to receive(:authorize_tour_host_request).and_return(true)
+      allow_any_instance_of(ApplicationController).to receive(:tour_host).and_return(tour_host)
+    end
+
+    it 'destroys the requested tour' do
+      expect do
+        delete :destroy, params: { id: tour.id }
+      end.to change(Tour, :count).by(-1)
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it 'returns not found if the tour does not belong to the tour host' do
+      delete :destroy, params: { id: another_tour.id }
+
+      expect(response).to have_http_status(:not_found)
+      expect(JSON.parse(response.body)).to eq({ 'error' => 'Tour not found' })
+    end
+  end
 end

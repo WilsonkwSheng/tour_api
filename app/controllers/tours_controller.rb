@@ -25,6 +25,19 @@ class ToursController < ApplicationController
     end
   end
 
+  def destroy
+    @tour = @tour_host.tours.find_by(id: params[:id])
+    if @tour.present?
+      if @tour.destroy
+        head :no_content
+      else
+        render json: { error: 'Failed to destroy the tour' }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Tour not found' }, status: :not_found
+    end
+  end
+
   private
 
   def tour_params
