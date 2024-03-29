@@ -11,4 +11,8 @@ class ApplicationController < ActionController::API
       render json: { errors: e.message }, status: :unauthorized
     end
   end
+
+  def tour_host
+    @tour_host
+  end
 end
