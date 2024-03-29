@@ -39,4 +39,43 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  describe '#authorize_customer_request' do
+    let(:customer) { create(:customer) }
+    let(:valid_token) { JsonWebToken.encode(customer_id: customer.id) }
+
+    context 'when authorization header is present with a valid JWT token' do
+      before do
+        request.headers['Authorization'] = "Bearer #{valid_token}"
+      end
+
+      it 'sets @customer with the decoded customer' do
+        expect(controller).to receive(:render).never
+        controller.send(:authorize_customer_request)
+        expect(assigns(:customer)).to eq(customer)
+      end
+    end
+
+    context 'when authorization header is present with an invalid JWT token' do
+      before do
+        request.headers['Authorization'] = 'Bearer invalid_token'
+      end
+
+      it do
+        expect(controller).to receive(:render).with(json: { errors: 'Not enough or too many segments' }, status: :unauthorized)
+        controller.send(:authorize_customer_request)
+      end
+    end
+
+    context 'when authorization header is missing' do
+      before do
+        request.headers['Authorization'] = nil
+      end
+
+      it do
+        expect(controller).to receive(:render).with(json: { errors: 'Nil JSON web token' }, status: :unauthorized)
+        controller.send(:authorize_customer_request)
+      end
+    end
+  end
 end
