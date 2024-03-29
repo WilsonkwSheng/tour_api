@@ -25,7 +25,7 @@ RSpec.describe Booking, type: :model do
 
       it 'ensures customer cannot book the same tour more than once' do
         expect(duplicate_booking).not_to be_valid
-        expect(duplicate_booking.errors[:customer_id]).to include('has already been taken')
+        expect(duplicate_booking.errors[:customer_id]).to include('has already booked this tour')
       end
     end
   end
