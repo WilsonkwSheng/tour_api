@@ -109,4 +109,55 @@ RSpec.describe ToursController, type: :controller do
       expect(JSON.parse(response.body)).to eq({ 'error' => 'Tour not found' })
     end
   end
+
+  describe 'PUT #update' do
+    let(:tour_host) { create(:tour_host) }
+    let!(:tour) { create(:tour, tour_host: tour_host) }
+    let!(:itinerary1) { create(:itinerary, tour: tour, day: 'monday', date: Date.today, start_at: '10:00', end_at: '12:00') }
+    let!(:itinerary2) { create(:itinerary, tour: tour, day: 'tuesday', date: Date.today, start_at: '14:00', end_at: '16:00') }
+    let(:valid_attributes) do
+      {
+        title: 'Updated Tour Title',
+        description: 'Updated tour description',
+        region: 'Updated Region',
+        city: 'Updated City',
+        travel_type: 'Updated Travel Type',
+        itineraries_attributes: [
+          { id: itinerary1.id, day: 'monday', date: Date.today, start_at: '08:00', end_at: '10:00' },
+          { id: itinerary2.id, day: 'tuesday', date: Date.today, start_at: '12:00', end_at: '14:00', _destroy: '1' },
+          { day: 'wednesday', date: Date.tomorrow, start_at: '09:00', end_at: '11:00', title: 'New Itinerary', description: 'Description of new itinerary' }
+        ]
+      }
+    end
+
+    before do
+      allow_any_instance_of(ApplicationController).to receive(:authorize_tour_host_request).and_return(true)
+      allow_any_instance_of(ApplicationController).to receive(:tour_host).and_return(tour_host)
+    end
+
+    it 'updates the requested tour along with its itineraries' do
+      put :update, params: { id: tour.id, tour: valid_attributes }
+      
+      expect(response).to have_http_status(:ok)
+      tour.reload
+      expect(tour.title).to eq('Updated Tour Title')
+      expect(tour.description).to eq('Updated tour description')
+      expect(tour.region).to eq('Updated Region')
+      expect(tour.city).to eq('Updated City')
+      expect(tour.travel_type).to eq('Updated Travel Type')
+
+      itinerary1.reload
+      expect(itinerary1.start_at.utc.strftime('%H:%M')).to eq('08:00')
+      expect(itinerary1.end_at.utc.strftime('%H:%M')).to eq('10:00')
+
+      new_itinerary = tour.itineraries.find_by(day: 'wednesday', date: Date.tomorrow)
+      expect(new_itinerary).to be_present
+      expect(new_itinerary.start_at.utc.strftime('%H:%M')).to eq('09:00')
+      expect(new_itinerary.end_at.utc.strftime('%H:%M')).to eq('11:00')
+      expect(new_itinerary.title).to eq('New Itinerary')
+      expect(new_itinerary.description).to eq('Description of new itinerary')
+
+      expect(tour.itineraries.pluck(:id)).to eq([itinerary1.id, new_itinerary.id])
+    end
+  end
 end

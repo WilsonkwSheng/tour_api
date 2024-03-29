@@ -25,6 +25,19 @@ class ToursController < ApplicationController
     end
   end
 
+  def update
+    @tour = @tour_host.tours.find_by(id: params[:id])
+    if @tour.present?
+      if @tour.update(tour_params)
+        render json: @tour
+      else
+        render json: { errors: @tour.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Tour not found' }, status: :not_found
+    end
+  end
+
   def destroy
     @tour = @tour_host.tours.find_by(id: params[:id])
     if @tour.present?
@@ -42,7 +55,7 @@ class ToursController < ApplicationController
 
   def tour_params
     params.require(:tour).permit(:title, :description, :region, :city, :travel_type,
-                                 itineraries_attributes: [:day, :date, :start_at, :end_at, :title, :description])
+                                 itineraries_attributes: [:id, :day, :date, :start_at, :end_at, :title, :description, :_destroy])
   end
 
   def set_tour_host
