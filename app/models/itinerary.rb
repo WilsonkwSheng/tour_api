@@ -1,5 +1,7 @@
 class Itinerary < ApplicationRecord
   belongs_to :tour
+  has_many :images, as: :imageable, dependent: :destroy
+  accepts_nested_attributes_for :images
 
   enum day: {
     sunday: 0,

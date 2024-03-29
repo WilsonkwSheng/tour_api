@@ -55,7 +55,7 @@ class ToursController < ApplicationController
 
   def tour_params
     params.require(:tour).permit(:title, :description, :region, :city, :travel_type,
-                                 itineraries_attributes: [:id, :day, :date, :start_at, :end_at, :title, :description, :_destroy])
+                                 itineraries_attributes: [:id, :day, :date, :start_at, :end_at, :title, :description, :_destroy, images_attributes: [:id, :file, :_destroy]])
   end
 
   def set_tour_host
