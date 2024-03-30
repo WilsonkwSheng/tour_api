@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   post '/customers_auth/login', to: 'customers_authentication#login'
   resources :tours
   resources :bookings, only: [:create]
+  resources :customer_tours
 end
