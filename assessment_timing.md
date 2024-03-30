@@ -8,3 +8,10 @@
   - cors (to enable the API request to be made)
   - active_model_serializer (to enable more than tour details returned to endpoint)
   - customers tour lists endpoint (realized the customer needs a way to view all tour and did not prepare an endpoint for it)
+
+# Remaining enhancements
+
+- Allow tour to upload multiple images (Missed out this one)
+- Update readme and instructions for setup
+- Seed data
+- Upload the images to cloud service
