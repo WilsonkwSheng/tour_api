@@ -2,7 +2,7 @@ class ToursController < ApplicationController
   before_action :authorize_tour_host_request, :set_tour_host
 
   def index
-    @tours = @tour_host.tours
+    @tours = @tour_host.tours.includes(:images)
     render json: @tours
   end
 

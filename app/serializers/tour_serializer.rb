@@ -3,4 +3,5 @@ class TourSerializer < ActiveModel::Serializer
 
   has_many :itineraries
   has_many :bookings
+  has_many :images
 end
