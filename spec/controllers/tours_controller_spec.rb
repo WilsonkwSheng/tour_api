@@ -14,7 +14,8 @@ RSpec.describe ToursController, type: :controller do
         # Note: Commenting this out for now as it is saving to local drive public folder.
         # images_attributes: [
         #   { file: fixture_file_upload(Rails.root.join('spec', 'fixtures', 'test_image.png'), 'image/png') }
-        # ] }
+        # ]
+      }
       tour_host_attributes.merge(itineraries_attributes: [
         { day: 'monday', date: Date.today, start_at: '10:00', end_at: '12:00', title: 'Morning Activity', description: 'Description of morning activity',
           # Note: Commenting this out for now as it is saving to local drive public folder.
