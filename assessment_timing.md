@@ -11,7 +11,6 @@
 
 # Remaining enhancements
 
-- Allow tour to upload multiple images (Missed out this one)
 - Update readme and instructions for setup
 - Seed data
 - Upload the images to cloud service
