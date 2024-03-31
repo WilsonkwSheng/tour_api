@@ -17,9 +17,9 @@ class ToursController < ApplicationController
   end
 
   def show
-    @tour = @tour_host.tours.includes(itineraries: :images).find_by(id: params[:id])
+    @tour = @tour_host.tours.includes(:images, itineraries: :images).find_by(id: params[:id])
     if @tour.present?
-      render json: @tour, include: { itineraries: :images }
+      render json: @tour, include: { images: {}, itineraries: :images }
     else
       render json: { error: 'Tour not found' }, status: :not_found
     end
