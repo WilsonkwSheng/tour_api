@@ -13,4 +13,3 @@
 
 - Update readme and instructions for setup
 - Seed data
-- Upload the images to cloud service
