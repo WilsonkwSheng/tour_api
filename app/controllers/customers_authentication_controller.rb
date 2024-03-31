@@ -6,7 +6,7 @@ class CustomersAuthenticationController < ApplicationController
       token = JsonWebToken.encode(customer_id: @customer.id)
       time = Time.now + 24.hours.to_i
       render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M"),
-                     name: @customer.name }, status: :ok
+                     name: @customer.name, customer_id: @customer.id }, status: :ok
     else
       render json: { error: 'unauthorized' }, status: :unauthorized
     end
